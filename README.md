@@ -13,7 +13,7 @@ A Soul Up é uma plataforma digital que aproxima pessoas interessadas em sustent
 - React Hook Form
 - Fetch API nativa para requisições HTTP (sem Axios)
 - Git, GitHub e GitFlow
-- Vercel (deploy previsto)
+- Vercel (deploy de produção)
 
 ## Funcionalidades
 
@@ -117,10 +117,8 @@ public/              # arquivos públicos
 
 ## Entrega e publicação
 
-Preencher após a publicação oficial:
-
-- **Repositório GitHub:** pendente de criação/confirmação.
-- **Deploy Vercel:** pendente de publicação.
+- **Repositório GitHub:** [tuzin07on/soul-up-sprint-4](https://github.com/tuzin07on/soul-up-sprint-4).
+- **Deploy Vercel:** [soul-up-sprint-4.vercel.app](https://soul-up-sprint-4.vercel.app/).
 - **API Java publicada:** [soulup-api no GitHub](https://github.com/guilhermenovaes07-coder/soulup-api) · [API no Render](https://soulup-api-x6cl.onrender.com/soulup).
 - **Vídeo YouTube (até 3 minutos):** pendente de gravação e publicação.
 
