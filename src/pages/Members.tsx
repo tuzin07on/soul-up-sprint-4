@@ -8,8 +8,8 @@ import type { TeamMember } from '../types/domain'
 const members: TeamMember[] = [
   { name: 'Arthur Cordão', rm: 'RM 570313', className: '1TDSR', role: '🎯 Full Stack Developer', photo: arthurPhoto, github: 'https://github.com/tuzin07on', linkedin: 'https://www.linkedin.com/in/arthur-cord%C3%A3o-4bb94434b/' },
   { name: 'Jeferson Faria', rm: 'RM 573038', className: '1TDSR', role: '⚙️ Backend Developer', photo: jefersonPhoto, github: 'https://github.com/jeffersonfaria', linkedin: 'https://www.linkedin.com/in/jeffersonfaria-09b2b024b/' },
-  { name: 'Guilherme Novaes', rm: 'RM 570444', className: '1TDSR', role: '🎨 UI/UX Designer', photo: guilhermePhoto, github: 'https://github.com/guilherme-novaes', linkedin: 'https://www.linkedin.com/in/guilherme-novaes-09b2b024b/' },
-  { name: 'Josué Menezes', rm: 'RM 569220', className: '1TDSR', role: '📊 Data Analyst', photo: josuePhoto, github: 'https://github.com/josuemenezes', linkedin: 'https://www.linkedin.com/in/josu%C3%A9-menezes/' },
+  { name: 'Guilherme Novaes', rm: 'RM 570444', className: '1TDSR', role: '🎨 UI/UX Designer', photo: guilhermePhoto, github: 'https://github.com/guilhermenovaes07-coder', linkedin: 'https://www.linkedin.com/in/guilherme-novaes-09b2b024b/' },
+  { name: 'Josué Menezes', rm: 'RM 569220', className: '1TDSR', role: '📊 Data Analyst', photo: josuePhoto, github: 'https://github.com/josue-menezes', linkedin: 'https://www.linkedin.com/in/josu%C3%A9-menezes/' },
 ]
 
 export function Members() {

@@ -42,6 +42,9 @@ export async function request<T>(path: string, init: RequestInit = {}): Promise<
 
 export function toApiError(error: unknown): ApiError {
   if (error instanceof HttpError) return { message: error.message, status: error.status }
+  if (error instanceof TypeError) {
+    return { message: 'Não foi possível conectar à API. Ela usa o plano gratuito do Render e pode levar até 50 segundos para acordar. Tente novamente em instantes.' }
+  }
   if (error instanceof Error) return { message: error.message }
   return { message: 'Ocorreu um erro inesperado ao comunicar com o servidor.' }
 }
