@@ -7,6 +7,11 @@ import type { ActionCategory, SustainableAction, UserActionRegistration } from '
 
 const approvedStatus = 'APROVADO'
 const pendingStatus = 'PENDENTE'
+const registrationStatusLabels: Record<string, string> = {
+  APROVADO: 'Aprovada',
+  PENDENTE: 'Em análise',
+  REJEITADO: 'Não aprovada',
+}
 
 export function Challenges() {
   const [actions, setActions] = useState<SustainableAction[]>([])
@@ -105,6 +110,16 @@ export function Challenges() {
       .find(registration => registration.status !== 'REJEITADO')
   }
 
+  function getActionName(actionCode: number) {
+    return actions.find(action => action.codigo === actionCode)?.nome ?? `Ação ${actionCode}`
+  }
+
+  function formatRegistrationDate(date: string | null) {
+    if (!date) return 'Data não informada'
+    const parsedDate = new Date(date)
+    return Number.isNaN(parsedDate.getTime()) ? 'Data não informada' : parsedDate.toLocaleDateString('pt-BR')
+  }
+
   return <>
     <PageTitle title="Desafios sustentáveis" text="Conheça ações sustentáveis da API Soul Up, registre sua participação e acompanhe os pontos aprovados." />
     <section className="mx-auto max-w-6xl px-5 py-12">
@@ -177,7 +192,7 @@ export function Challenges() {
             <p className="mt-3 flex-1 text-sm leading-6 text-slate-600">{action.descricao || 'Ação sustentável cadastrada pela equipe Soul Up.'}</p>
             <div className="mt-5 flex items-center justify-between text-xs font-semibold text-slate-500">
               <span>⭐ {action.pontosEcoa} Ecoa Points</span>
-              {registration && <span>{registration.status}</span>}
+              {registration && <span>{registrationStatusLabels[registration.status] ?? registration.status}</span>}
             </div>
             <button
               type="button"
@@ -191,6 +206,26 @@ export function Challenges() {
         })}
       </div>}
       {feedback && <p role="status" className="mt-5 rounded-xl bg-mint p-4 text-sm font-medium text-forest">{feedback}</p>}
+
+      {userCode !== null && <section aria-labelledby="registration-history-title" className="mt-10">
+        <h2 id="registration-history-title" className="font-serif text-2xl font-bold text-forest">Histórico de participações</h2>
+        {registrations.length === 0
+          ? <p className="mt-4 rounded-2xl border border-dashed border-forest/20 bg-white p-6 text-sm text-slate-600">Você ainda não registrou participações.</p>
+          : <ul className="mt-4 space-y-3">
+            {[...registrations].sort((left, right) => right.codigo - left.codigo).map(registration => (
+              <li key={registration.codigo} className="flex flex-col gap-2 rounded-2xl border border-forest/10 bg-white p-5 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="font-semibold text-forest">{getActionName(registration.codigoAcao)}</p>
+                  <p className="mt-1 text-sm text-slate-500">{formatRegistrationDate(registration.dataRealizacao)}</p>
+                </div>
+                <div className="flex items-center gap-3 text-sm">
+                  <span className="rounded-full bg-mint px-3 py-1 font-semibold text-forest">{registrationStatusLabels[registration.status] ?? registration.status}</span>
+                  <span className="font-semibold text-slate-600">{registration.pontosGanhos ?? 0} pontos</span>
+                </div>
+              </li>
+            ))}
+          </ul>}
+      </section>}
 
       <div className="mt-10 rounded-2xl border border-forest/10 bg-sand p-6 text-center">
         <p className="font-semibold text-forest">Uma atitude pode inspirar muitas outras.</p>
