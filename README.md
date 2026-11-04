@@ -79,6 +79,15 @@ Endpoints usados pela página **Desafios**:
 
 O POST de participação envia `{ "codigoUsuario": 7, "codigoAcao": 1 }`; a API registra a participação como pendente e os pontos são mostrados após aprovação. Como o Back-End atual não oferece autenticação, a página solicita o código de um usuário já cadastrado. A API já inclui operações `PUT` e `DELETE` nos recursos CRUD descritos no README do Back-End. O mural da comunidade não tem endpoint correspondente no Back-End atual e, por isso, permanece salvo localmente neste navegador; não é apresentado como dado remoto.
 
+### Testar o fluxo de participação
+
+1. Consulte `GET /soulup/usuario` na API para localizar um usuário existente e use seu campo `codigo` na página **Desafios**.
+2. Carregue o progresso para ver os registros já feitos por esse usuário.
+3. Registre uma ação disponível. A API responde com um registro `PENDENTE`, que aparece no histórico até ser aprovado ou rejeitado.
+4. Após a aprovação pela equipe responsável, carregue novamente o progresso para conferir os Ecoa Points contabilizados.
+
+Os registros retornam os status `PENDENTE`, `APROVADO` ou `REJEITADO`. A interface apresenta esses estados como “Em análise”, “Aprovada” e “Não aprovada”. O Front-End não aprova nem rejeita participações, pois essas decisões dependem das regras e dos endpoints de moderação do Back-End.
+
 > O serviço no Render usa o plano gratuito e pode levar alguns segundos para responder após ficar inativo. Consulte o [status da API](https://soulup-api-x6cl.onrender.com/soulup).
 
 ## Estrutura de pastas
