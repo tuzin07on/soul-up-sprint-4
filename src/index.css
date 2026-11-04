@@ -18,11 +18,17 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-* { box-sizing: border-box; }
-html { min-width: 320px; scroll-behavior: smooth; }
-body { min-width: 320px; margin: 0; }
-button, input, textarea, select { font: inherit; }
-button, a { -webkit-tap-highlight-color: transparent; }
+@layer base {
+  * { box-sizing: border-box; }
+  html { min-width: 320px; scroll-behavior: smooth; }
+  body { min-width: 320px; margin: 0; }
+  button, input, textarea, select { font: inherit; }
+  button, a { -webkit-tap-highlight-color: transparent; }
+}
+
+@keyframes flutuar { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
+.animate-flutuar { animation: flutuar 4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .animate-flutuar { animation: none; } }
 button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
   outline: 3px solid #60a5fa;
   outline-offset: 3px;

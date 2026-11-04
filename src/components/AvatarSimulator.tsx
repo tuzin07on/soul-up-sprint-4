@@ -68,7 +68,7 @@ export function AvatarSimulator() {
     <div className="relative grid gap-8 p-6 md:p-10 lg:grid-cols-[1fr_1.15fr]">
       <div className="flex flex-col items-center rounded-3xl bg-gradient-to-b from-blue-50 to-white p-6">
         <span className="rounded-full bg-forest px-3 py-1 text-xs font-bold tracking-[0.14em] text-white">SIMULAÇÃO INTERATIVA</span>
-        <div className={`mt-4 h-72 w-60 transition-transform duration-500 ${celebrating ? 'scale-110' : 'scale-100'}`}>
+        <div className={`mt-4 h-72 w-60 transition-transform duration-500 ${celebrating ? 'scale-110' : 'scale-100 animate-flutuar'}`}>
           <AvatarFigure aura={progress.aura} level={progress.level} mood={mood} equipped={avatar.equipped} />
         </div>
         <input
