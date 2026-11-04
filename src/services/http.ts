@@ -17,6 +17,36 @@ export class HttpError extends Error {
   }
 }
 
+function getErrorMessage(body: unknown): string | undefined {
+  if (typeof body === 'string') return body.trim() || undefined
+  if (!body || typeof body !== 'object') return undefined
+
+  const response = body as {
+    message?: unknown
+    error?: unknown
+    errors?: unknown
+  }
+  if (typeof response.message === 'string' && response.message.trim()) return response.message
+  if (typeof response.error === 'string' && response.error.trim()) return response.error
+
+  if (Array.isArray(response.errors)) {
+    const messages = response.errors
+      .map(error => {
+        if (typeof error === 'string') return error
+        if (!error || typeof error !== 'object') return null
+        const detail = error as { defaultMessage?: unknown; message?: unknown }
+        if (typeof detail.defaultMessage === 'string') return detail.defaultMessage
+        if (typeof detail.message === 'string') return detail.message
+        return null
+      })
+      .filter((message): message is string => Boolean(message))
+
+    if (messages.length > 0) return messages.join(' ')
+  }
+
+  return undefined
+}
+
 export async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   if (!isApiConfigured) {
     throw new Error('API Java ainda não configurada. Defina VITE_API_URL no arquivo .env.local.')
@@ -32,8 +62,18 @@ export async function request<T>(path: string, init: RequestInit = {}): Promise<
   })
 
   if (!response.ok) {
-    const body = await response.json().catch(() => null) as { message?: string; error?: string } | null
-    throw new HttpError(body?.message ?? body?.error ?? `A API respondeu com status ${response.status}.`, response.status)
+    const responseBody = await response.text()
+    let body: unknown
+    try {
+      body = JSON.parse(responseBody) as unknown
+    } catch {
+      body = responseBody
+    }
+
+    throw new HttpError(
+      getErrorMessage(body) ?? `A API respondeu com status ${response.status}.`,
+      response.status,
+    )
   }
 
   if (response.status === 204) return undefined as T
