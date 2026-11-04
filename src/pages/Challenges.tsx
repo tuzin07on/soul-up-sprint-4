@@ -88,9 +88,16 @@ export function Challenges() {
     setRegisteringCode(action.codigo)
     setFeedback(null)
     try {
-      const registration = await sustainableActionService.register(userCode, action.codigo)
-      setRegistrations(current => [registration, ...current])
-      setFeedback('Participação registrada na API! Ela ficará pendente até ser aprovada.')
+      const created = await sustainableActionService.register(userCode, action.codigo)
+      setRegistrations(current => [created, ...current.filter(item => item.codigo !== created.codigo)])
+
+      try {
+        const latestRegistrations = await sustainableActionService.listUserRegistrations(userCode)
+        setRegistrations(latestRegistrations)
+        setFeedback('Participação registrada na API! Ela ficará pendente até ser aprovada.')
+      } catch (cause) {
+        setFeedback(`Participação registrada, mas não foi possível atualizar seu progresso: ${toApiError(cause).message}`)
+      }
     } catch (cause) {
       setFeedback(toApiError(cause).message)
     } finally {
