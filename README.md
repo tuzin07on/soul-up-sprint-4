@@ -19,6 +19,7 @@ A Soul Up é uma plataforma digital que aproxima pessoas interessadas em sustent
 
 - Navegação SPA com páginas institucionais e rotas de solução.
 - Rotas estáticas e rota dinâmica `/solucao/:id`.
+- Simulador interativo do avatar na página Solução: missões somam Ecoa Points, o avatar sobe de nível (Semente → Guardião da Terra) e veste os itens comprados na loja, desenhados em SVG.
 - Página de desafios consumindo ações e categorias da API Java, registrando participações e exibindo pontos aprovados.
 - Mural da comunidade com criação, edição e exclusão de publicações.
 - Estados de carregamento, erro e lista vazia nas funcionalidades integradas à API.
@@ -102,10 +103,10 @@ public/              # arquivos públicos
 
 | Integrante | RM | Turma | Foto | GitHub | LinkedIn |
 | --- | --- | --- | --- | --- | --- |
-| Arthur Cordão | RM 570313 | 1TDSR | `src/assets/members/arthur.jpg` | [tuzin07on](https://github.com/tuzin07on) | [LinkedIn](https://www.linkedin.com/in/arthur-cord%C3%A3o-4bb94434b/) |
-| Guilherme Novaes | RM 570444 | 1TDSR | `src/assets/members/guilherme.jpg` | [guilherme-novaes](https://github.com/guilherme-novaes) | [LinkedIn](https://www.linkedin.com/in/guilherme-novaes-09b2b024b/) |
-| Jeferson Faria | RM 573038 | 1TDSR | `src/assets/members/jeferson.jpg` | [jeffersonfaria](https://github.com/jeffersonfaria) | [LinkedIn](https://www.linkedin.com/in/jeffersonfaria-09b2b024b/) |
-| Josué Menezes | RM 569220 | 1TDSR | `src/assets/members/josue.png` | [josuemenezes](https://github.com/josuemenezes) | [LinkedIn](https://www.linkedin.com/in/josu%C3%A9-menezes/) |
+| Arthur Cordão | RM 570313 | 1TDSR | <img src="src/assets/members/arthur.jpg" width="80" alt="Arthur Cordão"> | [tuzin07on](https://github.com/tuzin07on) | [LinkedIn](https://www.linkedin.com/in/arthur-cord%C3%A3o-4bb94434b/) |
+| Guilherme Novaes | RM 570444 | 1TDSR | <img src="src/assets/members/guilherme.jpg" width="80" alt="Guilherme Novaes"> | [guilhermenovaes07-coder](https://github.com/guilhermenovaes07-coder) | [LinkedIn](https://www.linkedin.com/in/guilherme-novaes-09b2b024b/) |
+| Jeferson Faria | RM 573038 | 1TDSR | <img src="src/assets/members/jeferson.jpg" width="80" alt="Jeferson Faria"> | [jeffersonfaria](https://github.com/jeffersonfaria) | [LinkedIn](https://www.linkedin.com/in/jeffersonfaria-09b2b024b/) |
+| Josué Menezes | RM 569220 | 1TDSR | <img src="src/assets/members/josue.png" width="80" alt="Josué Menezes"> | [josue-menezes](https://github.com/josue-menezes) | [LinkedIn](https://www.linkedin.com/in/josu%C3%A9-menezes/) |
 
 ## Estratégia de versionamento (GitFlow)
 
