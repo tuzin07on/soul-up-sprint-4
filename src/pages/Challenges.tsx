@@ -11,6 +11,7 @@ const pendingStatus = 'PENDENTE'
 export function Challenges() {
   const [actions, setActions] = useState<SustainableAction[]>([])
   const [categories, setCategories] = useState<ActionCategory[]>([])
+  const [catalogRequest, setCatalogRequest] = useState(0)
   const [registrations, setRegistrations] = useState<UserActionRegistration[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -31,6 +32,7 @@ export function Challenges() {
         if (!active) return
         setActions(catalog.actions)
         setCategories(catalog.categories)
+        setError(null)
       } catch (cause) {
         if (active) setError(toApiError(cause).message)
       } finally {
@@ -42,7 +44,13 @@ export function Challenges() {
     return () => {
       active = false
     }
-  }, [])
+  }, [catalogRequest])
+
+  function retryCatalog() {
+    setLoading(true)
+    setError(null)
+    setCatalogRequest(current => current + 1)
+  }
 
   const categoryNames = useMemo(
     () => new Map(categories.map(category => [category.codigo, category.nome])),
@@ -150,17 +158,22 @@ export function Challenges() {
           <p className="text-xs font-bold tracking-[.16em] text-clay">AÇÕES DISPONÍVEIS</p>
           <h2 className="mt-2 font-serif text-3xl font-bold text-forest">Desafios da comunidade</h2>
         </div>
-        <label className="text-sm font-semibold text-slate-600">
-          Filtrar por categoria
-          <select value={filter} onChange={event => setFilter(event.target.value)} className="ml-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
-            <option value="all">Todas</option>
-            {categories.map(category => <option key={category.codigo} value={category.codigo}>{category.nome}</option>)}
-          </select>
-        </label>
+        <div className="flex flex-wrap items-center gap-3">
+          <label className="text-sm font-semibold text-slate-600">
+            Filtrar por categoria
+            <select value={filter} onChange={event => setFilter(event.target.value)} className="ml-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
+              <option value="all">Todas</option>
+              {categories.map(category => <option key={category.codigo} value={category.codigo}>{category.nome}</option>)}
+            </select>
+          </label>
+          <button type="button" onClick={retryCatalog} disabled={loading} className="rounded-lg border border-forest/20 px-4 py-2 text-sm font-bold text-forest hover:bg-mint disabled:cursor-wait disabled:opacity-60">
+            {loading ? 'Carregando...' : 'Atualizar ações'}
+          </button>
+        </div>
       </div>
 
       {loading && <p role="status" className="mt-7 rounded-2xl bg-white p-6 text-slate-600">Carregando ações da API Java...</p>}
-      {error && <div role="alert" className="mt-7 rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-800"><p>{error}</p><button onClick={() => window.location.reload()} className="mt-3 font-bold underline">Tentar novamente</button></div>}
+      {error && <div role="alert" className="mt-7 rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-800"><p>{error}</p><button onClick={retryCatalog} className="mt-3 font-bold underline">Tentar novamente</button></div>}
       {!loading && !error && actions.length === 0 && <div className="mt-7 rounded-2xl border border-dashed border-forest/20 bg-white p-8 text-center"><p className="text-3xl" aria-hidden="true">🌱</p><h3 className="mt-3 font-bold text-forest">Nenhuma ação disponível</h3><p className="mt-2 text-sm text-slate-500">A API não retornou ações sustentáveis ativas.</p></div>}
 
       {!loading && !error && actions.length > 0 && <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
