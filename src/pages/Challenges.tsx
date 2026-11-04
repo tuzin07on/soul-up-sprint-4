@@ -125,8 +125,8 @@ export function Challenges() {
         </div>
       </div>
 
-      <form onSubmit={connectUser} className="mt-7 flex flex-col gap-3 rounded-2xl border border-forest/10 bg-white p-5 sm:flex-row sm:items-end">
-        <label className="flex-1 text-sm font-semibold text-slate-700">
+      <form onSubmit={connectUser} className="mt-7 flex flex-col gap-3 rounded-2xl border border-forest/10 bg-white p-5 shadow-sm sm:flex-row sm:flex-wrap sm:items-end">
+        <label className="min-w-0 flex-1 text-sm font-semibold text-slate-700">
           Código do usuário cadastrado na API
           <input
             type="number"
@@ -160,7 +160,7 @@ export function Challenges() {
       </div>
 
       {loading && <p role="status" className="mt-7 rounded-2xl bg-white p-6 text-slate-600">Carregando ações da API Java...</p>}
-      {error && <div role="alert" className="mt-7 rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-800"><p>{error}</p><button onClick={() => window.location.reload()} className="mt-3 font-bold underline">Tentar novamente</button></div>}
+      {error && <div role="alert" className="mt-7 rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-800"><p>{error}</p><button onClick={() => window.location.reload()} className="mt-3 rounded-lg bg-red-100 px-3 py-1.5 font-bold transition hover:bg-red-200">Tentar novamente</button></div>}
       {!loading && !error && actions.length === 0 && <div className="mt-7 rounded-2xl border border-dashed border-forest/20 bg-white p-8 text-center"><p className="text-3xl" aria-hidden="true">🌱</p><h3 className="mt-3 font-bold text-forest">Nenhuma ação disponível</h3><p className="mt-2 text-sm text-slate-500">A API não retornou ações sustentáveis ativas.</p></div>}
 
       {!loading && !error && actions.length > 0 && <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
