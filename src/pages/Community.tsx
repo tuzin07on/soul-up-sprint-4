@@ -13,6 +13,15 @@ const categories: { value: ChallengeCategory; label: string }[] = [
 
 const categoryLabel = (category: ChallengeCategory) => categories.find(item => item.value === category)?.label ?? 'Comunidade'
 
+const MIN_CONTENT_LENGTH = 10
+
+/** O atributo `required` aceita texto só com espaços, então a regra é conferida após o trim. */
+function validatePost(title: string, content: string): string | null {
+  if (!title) return 'Informe um título para a publicação.'
+  if (content.length < MIN_CONTENT_LENGTH) return `A publicação precisa ter pelo menos ${MIN_CONTENT_LENGTH} caracteres.`
+  return null
+}
+
 export function Community() {
   const { posts, loading, error, refresh, createPost, updatePost, removePost } = useCommunity()
   const [author, setAuthor] = useState('Visitante Soul Up')
@@ -21,14 +30,23 @@ export function Community() {
   const [category, setCategory] = useState<ChallengeCategory>('comunidade')
   const [editing, setEditing] = useState<CommunityPost | null>(null)
   const [feedback, setFeedback] = useState('')
+  const [editError, setEditError] = useState('')
   const [saving, setSaving] = useState(false)
 
   async function handleCreate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    const newAuthor = author.trim()
+    const newTitle = title.trim()
+    const newContent = content.trim()
+    const invalid = newAuthor ? validatePost(newTitle, newContent) : 'Informe seu nome.'
+    if (invalid) {
+      setFeedback(invalid)
+      return
+    }
     setSaving(true)
     setFeedback('')
     try {
-      await createPost({ author: author.trim(), title: title.trim(), content: content.trim(), category })
+      await createPost({ author: newAuthor, title: newTitle, content: newContent, category })
       setTitle('')
       setContent('')
       setFeedback('Sua publicação foi adicionada à comunidade!')
@@ -42,13 +60,21 @@ export function Community() {
   async function handleUpdate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!editing) return
+    const newTitle = editing.title.trim()
+    const newContent = editing.content.trim()
+    const invalid = validatePost(newTitle, newContent)
+    if (invalid) {
+      setEditError(invalid)
+      return
+    }
     setSaving(true)
+    setEditError('')
     try {
-      await updatePost(editing.id, { title: editing.title, content: editing.content, category: editing.category })
+      await updatePost(editing.id, { title: newTitle, content: newContent, category: editing.category })
       setEditing(null)
       setFeedback('Publicação atualizada com sucesso.')
     } catch (cause) {
-      setFeedback(cause instanceof Error ? cause.message : 'Não foi possível atualizar a publicação.')
+      setEditError(cause instanceof Error ? cause.message : 'Não foi possível atualizar a publicação.')
     } finally {
       setSaving(false)
     }
@@ -105,7 +131,7 @@ export function Community() {
         {!loading && !error && posts.length === 0 && <div className="rounded-2xl border border-dashed border-forest/20 bg-white p-8 text-center"><p className="text-3xl">🌱</p><h3 className="mt-3 font-bold text-forest">O mural está começando</h3><p className="mt-2 text-sm text-slate-500">Seja a primeira pessoa a compartilhar uma ideia.</p></div>}
         {posts.map(post => <article key={post.id} className="rounded-2xl border border-forest/10 bg-white p-6 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-2"><span className="rounded-full bg-mint px-3 py-1 text-xs font-bold text-forest">{categoryLabel(post.category)}</span><time className="text-xs text-slate-400" dateTime={post.createdAt}>{new Date(post.createdAt).toLocaleDateString('pt-BR')}</time></div>
-          {editing?.id === post.id ? <form onSubmit={handleUpdate} className="mt-4 space-y-3"><input value={editing.title} onChange={event => setEditing({ ...editing, title: event.target.value })} required maxLength={90} className="w-full rounded-lg border border-slate-200 px-3 py-2" /><textarea value={editing.content} onChange={event => setEditing({ ...editing, content: event.target.value })} required minLength={10} maxLength={600} rows={3} className="w-full rounded-lg border border-slate-200 px-3 py-2" /><select value={editing.category} onChange={event => setEditing({ ...editing, category: event.target.value as ChallengeCategory })} className="w-full rounded-lg border border-slate-200 px-3 py-2">{categories.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}</select><div className="flex gap-3"><button disabled={saving} className="rounded-lg bg-forest px-4 py-2 text-sm font-bold text-white">Salvar</button><button type="button" onClick={() => setEditing(null)} className="rounded-lg border px-4 py-2 text-sm font-bold text-slate-600">Cancelar</button></div></form> : <><h3 className="mt-4 font-serif text-2xl font-bold text-forest">{post.title}</h3><p className="mt-3 leading-7 text-slate-600">{post.content}</p><p className="mt-4 text-xs font-semibold text-slate-500">Por {post.author}</p><div className="mt-4 flex gap-4 border-t border-slate-100 pt-4"><button onClick={() => setEditing(post)} className="text-sm font-bold text-forest underline underline-offset-4">Editar</button><button onClick={() => void handleRemove(post.id)} className="text-sm font-bold text-red-600 underline underline-offset-4">Excluir</button></div></>}
+          {editing?.id === post.id ? <form onSubmit={handleUpdate} className="mt-4 space-y-3"><input value={editing.title} onChange={event => setEditing({ ...editing, title: event.target.value })} required maxLength={90} className="w-full rounded-lg border border-slate-200 px-3 py-2" /><textarea value={editing.content} onChange={event => setEditing({ ...editing, content: event.target.value })} required minLength={10} maxLength={600} rows={3} className="w-full rounded-lg border border-slate-200 px-3 py-2" /><select value={editing.category} onChange={event => setEditing({ ...editing, category: event.target.value as ChallengeCategory })} className="w-full rounded-lg border border-slate-200 px-3 py-2">{categories.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}</select>{editError && <p role="alert" className="text-sm font-medium text-red-600">{editError}</p>}<div className="flex gap-3"><button disabled={saving} className="rounded-lg bg-forest px-4 py-2 text-sm font-bold text-white">Salvar</button><button type="button" onClick={() => { setEditing(null); setEditError('') }} className="rounded-lg border px-4 py-2 text-sm font-bold text-slate-600">Cancelar</button></div></form> : <><h3 className="mt-4 font-serif text-2xl font-bold text-forest">{post.title}</h3><p className="mt-3 leading-7 text-slate-600">{post.content}</p><p className="mt-4 text-xs font-semibold text-slate-500">Por {post.author}</p><div className="mt-4 flex gap-4 border-t border-slate-100 pt-4"><button onClick={() => { setEditing(post); setEditError('') }} className="text-sm font-bold text-forest underline underline-offset-4">Editar</button><button onClick={() => void handleRemove(post.id)} className="text-sm font-bold text-red-600 underline underline-offset-4">Excluir</button></div></>}
         </article>)}
       </div>
     </section>
