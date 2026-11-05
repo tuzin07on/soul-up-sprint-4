@@ -4,7 +4,7 @@
 
 1. `main` deve conter somente versões estáveis e prontas para entrega.
 2. `develop` reúne as etapas concluídas da Sprint 4.
-3. Cada etapa de trabalho deve partir de `develop`, em uma branch sequencial (`STEP-5`, `STEP-6`, ...).
+3. Cada etapa de trabalho deve partir de `develop`, em uma branch sequencial (`Step-6`, `Step-7`, ...).
 4. Ao concluir uma etapa, abra um Pull Request para `develop` e aguarde a revisão de outro integrante.
 5. Após validação e aceite, integre a etapa em `develop`. A publicação estável deve partir de `main`.
 
