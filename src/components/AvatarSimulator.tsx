@@ -1,9 +1,40 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { avatarItems, avatarLevels, avatarMissions } from '../data/avatar'
 import type { AvatarItem, AvatarMission, AvatarMood, AvatarProgress, AvatarState } from '../types/avatar'
 import { AvatarFigure } from './AvatarFigure'
 
+const STORAGE_KEY = 'soulup.avatar.state.v1'
 const initialState: AvatarState = { name: 'Meu Avatar', points: 0, totalEarned: 0, owned: [], equipped: {} }
+
+const isValidPoints = (value: unknown) => typeof value === 'number' && Number.isFinite(value) && value >= 0
+
+function isAvatarState(value: unknown): value is AvatarState {
+  if (typeof value !== 'object' || value === null) return false
+  const state = value as Partial<AvatarState>
+  return typeof state.name === 'string'
+    && isValidPoints(state.points)
+    && isValidPoints(state.totalEarned)
+    && Array.isArray(state.owned)
+    && typeof state.equipped === 'object' && state.equipped !== null
+}
+
+/** Recupera o progresso salvo; dados ausentes ou inválidos reiniciam a simulação. */
+function loadAvatar(): AvatarState {
+  try {
+    const saved: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null')
+    return isAvatarState(saved) ? saved : initialState
+  } catch {
+    return initialState
+  }
+}
+
+function saveAvatar(avatar: AvatarState) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(avatar))
+  } catch {
+    // Sem acesso ao armazenamento, a simulação continua funcionando apenas nesta visita.
+  }
+}
 
 /** Descobre o nível pelo total de pontos ganhos (comprar itens não faz o avatar regredir). */
 function getProgress(totalEarned: number): AvatarProgress {
@@ -15,9 +46,11 @@ function getProgress(totalEarned: number): AvatarProgress {
 }
 
 export function AvatarSimulator() {
-  const [avatar, setAvatar] = useState<AvatarState>(initialState)
-  const [message, setMessage] = useState('Complete uma missão para ganhar seus primeiros Ecoa Points.')
+  const [avatar, setAvatar] = useState<AvatarState>(loadAvatar)
+  const [message, setMessage] = useState(() => avatar.totalEarned > 0 ? 'Progresso recuperado. Continue de onde parou!' : 'Complete uma missão para ganhar seus primeiros Ecoa Points.')
   const [celebrating, setCelebrating] = useState(false)
+
+  useEffect(() => { saveAvatar(avatar) }, [avatar])
 
   const progress = getProgress(avatar.totalEarned)
   const mood: AvatarMood = celebrating ? 'radiante' : avatar.totalEarned > 0 ? 'feliz' : 'neutro'

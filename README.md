@@ -19,10 +19,12 @@ A Soul Up é uma plataforma digital que aproxima pessoas interessadas em sustent
 
 - Navegação SPA com páginas institucionais e rotas de solução.
 - Rotas estáticas e rota dinâmica `/solucao/:id`.
-- Simulador interativo do avatar na página Solução: missões somam Ecoa Points, o avatar sobe de nível (Semente → Guardião da Terra) e veste os itens comprados na loja, desenhados em SVG.
-- Página de desafios consumindo ações e categorias da API Java, registrando participações e exibindo pontos aprovados.
+- Simulador interativo do avatar na página Solução: missões somam Ecoa Points, o avatar sobe de nível (Semente → Guardião da Terra) e veste os itens comprados na loja, desenhados em SVG. O progresso fica salvo neste navegador até ser reiniciado.
+- Página de desafios consumindo ações e categorias da API Java, com filtro por categoria, registro de participações e exibição dos pontos aprovados.
 - Mural da comunidade com criação, edição e exclusão de publicações.
-- Estados de carregamento, erro e lista vazia nas funcionalidades integradas à API.
+- Validação dos formulários do mural e de contato, recusando campos preenchidos apenas com espaços.
+- Título próprio na aba do navegador para cada página.
+- Estados de carregamento, erro e lista vazia nas funcionalidades integradas à API, incluindo filtros sem resultado.
 - Camada de serviços separada dos componentes de interface.
 - Tipagem TypeScript com interfaces, tipos literais, union types e intersection types.
 - Layout responsivo com breakpoints do Tailwind CSS.
@@ -33,13 +35,14 @@ A Soul Up é uma plataforma digital que aproxima pessoas interessadas em sustent
 | --- | --- |
 | `/` | Página inicial |
 | `/sobre` | Apresentação da Soul Up |
-| `/solucao` | Visão geral da solução |
+| `/solucao` | Visão geral da solução e simulador do avatar |
 | `/solucao/:id` | Detalhe dinâmico de uma solução |
 | `/desafios` | Desafios e progresso do participante |
 | `/comunidade` | Mural com operações de publicação |
 | `/faq` | Perguntas frequentes |
 | `/integrantes` | Integrantes e perfis |
 | `/contato` | Formulário de contato |
+| `*` | Página 404 para rotas inexistentes |
 
 ## Requisitos
 
@@ -58,9 +61,9 @@ Abra a URL local exibida pelo Vite (normalmente `http://localhost:5173`).
 ### Verificações
 
 ```bash
-npm run check
-npm run build
-npm run preview
+npm run check    # checagem de tipos (tsc) e lint (ESLint)
+npm run build    # gera a versão de produção em dist/
+npm run preview  # serve localmente a versão gerada
 ```
 
 ## Integração com a API Java
@@ -112,7 +115,7 @@ public/              # arquivos públicos
 
 - `main`: versão estável preparada para entrega.
 - `develop`: integração das etapas da Sprint 4 antes da publicação.
-- `STEP-5`, `STEP-6`, `STEP-7` e seguintes: branches de trabalho sequenciais para cada etapa, com commits objetivos e rastreáveis.
+- `Step-1`, `Step-2`, `Step-3` e seguintes: branches de trabalho sequenciais para cada etapa, com commits objetivos e rastreáveis.
 - Após validar cada etapa, suas alterações devem ser integradas à branch `develop` por merge.
 - A equipe deve manter contribuições individuais reais no histórico. A exigência da atividade é de pelo menos 5 commits por integrante e 15 no total.
 
