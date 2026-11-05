@@ -190,7 +190,8 @@ export function Challenges() {
           </article>
         })}
       </div>}
-      {feedback && <p role="status" className="mt-5 rounded-xl bg-mint p-4 text-sm font-medium text-forest">{feedback}</p>}
+      {!loading && !error && actions.length > 0 && visibleActions.length === 0 && <div className="mt-7 rounded-2xl border border-dashed border-forest/20 bg-white p-8 text-center"><p className="text-3xl" aria-hidden="true">🔎</p><h3 className="mt-3 font-bold text-forest">Nenhuma ação nesta categoria</h3><p className="mt-2 text-sm text-slate-500">Escolha outra categoria ou veja todas as ações disponíveis.</p><button type="button" onClick={() => setFilter('all')} className="mt-4 rounded-xl bg-forest px-4 py-2 text-sm font-bold text-white transition hover:bg-clay">Ver todas as ações</button></div>}
+      {feedback &&<p role="status" className="mt-5 rounded-xl bg-mint p-4 text-sm font-medium text-forest">{feedback}</p>}
 
       <div className="mt-10 rounded-2xl border border-forest/10 bg-sand p-6 text-center">
         <p className="font-semibold text-forest">Uma atitude pode inspirar muitas outras.</p>
